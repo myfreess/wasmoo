@@ -10,18 +10,18 @@
 
 安装bash, curl, git, nodejs以及rust工具链, 然后按照以下说明依次执行相应命令。
 
-rust工具链可以使用rustup安装
+由于wasm_of_ocaml编译出的wasm文件需要支持wasm-gc的运行时才能正常运行，在安装nodejs时需要选择较高版本。
 
 ## 下载Wasm版MoonBit工具链
 
-首先在任意位置新建一个临时目录，然后执行以下命令下载最新的Wasm版MoonBit工具链:
+首先在任意位置新建一个临时目录，然后执行以下命令下载最新的Wasm版MoonBit工具链压缩包:
 
 ```shell
 curl -fSL -O https://github.com/moonbitlang/moonbit-compiler/releases/latest/download/moonbit-wasm.tar.gz
 tar -zxvf moonbit-wasm.tar.gz
 ```
 
-然后需要设置`MOON_HOME`环境变量，这个环境变量的值是存放MoonBit工具链相关文件的目录，默认为`~/.moon`。
+接着需要设置`MOON_HOME`环境变量，这个环境变量的值是存放MoonBit工具链相关文件的目录，默认为`~/.moon`。
 
 ```shell
 export MOON_HOME="$HOME/.moon"
@@ -30,6 +30,8 @@ export MOON_HOME="$HOME/.moon"
 ## 安装对应版本moon
 
 MoonBit的构建系统`moon`使用Rust编写并已经开源，自行构建安装即可。关键在于需要安装到正确的版本(因为构建系统和编译器的许多地方是强耦合的)，在wasm版MoonBit工具链的压缩包里有一个文件`moon_version`记录了该版本`moon`对应的git commit sha，使用`git reset --hard`即可切换到对应commit。
+
+moonrun是MoonBit官方提供的wasm运行时，为了方便跑测试我们把它也安装上。
 
 ```shell
 mkdir -p $HOME/.moon
@@ -44,6 +46,7 @@ cp target/release/moon "$BIN_DIR"
 cp target/release/moonrun "$BIN_DIR"
 popd
 ```
+
 ## 安装moonc/moonfmt/mooninfo/运行时依赖
 
 ```shell
@@ -86,4 +89,3 @@ echo "export PATH=\"$MOON_HOME/bin:"'$PATH"' >> ~/.zshrc
 ```
 
 ## 总结
-
