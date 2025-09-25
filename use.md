@@ -49,10 +49,17 @@ popd
 
 ## 安装moonc/moonfmt/mooninfo/运行时依赖
 
+编译器(moonc)格式化工具(moonfmt)mbti文件生成工具(mooninfo)被编译成wasm后需要用一个nodejs脚本进行引导，在放到`$MOON_HOME/bin`之前，首先需要为这些js脚本添加一个合适的shebang:
+
 ```shell
 sed -i '1 i #!'"$(which env) -S node --stack-size=4096" moonc.js
 sed -i '1 i #!'"$(which env) -S node --stack-size=4096" moonfmt.js
 sed -i '1 i #!'"$(which env) -S node --stack-size=4096" mooninfo.js
+```
+
+然后需要将脚本文件(以及一些运行时文件)放到正确的地方并加上可执行权限。
+
+```shell
 cp moonc.js moonfmt.js mooninfo.js moonc.assets moonfmt.assets mooninfo.assets "$BIN_DIR" -r
 mv "$BIN_DIR/moonc.js" "$BIN_DIR/moonc"
 mv "$BIN_DIR/moonfmt.js" "$BIN_DIR/moonfmt"
@@ -65,7 +72,9 @@ cp lib include "$MOON_HOME" -r
 
 ## 安装core
 
-> 由于目前moonc实现bundle的机制，wasm版的moonc所产生的.core文件会和native版本有一定不同. 
+在安装好编译器和构建系统之后，我们还需要安装对应版本的标准库。和构建系统一样，标准库和编译器之间也有非常强的耦合关系，所以版本需要精确对应。在wasm版MoonBit工具链的压缩包里有一个core.tar.gz，内容就是对应版本的标准库源码，解压到指定位置后执行`moon bundle`命令打包即可使用。
+
+> 由于目前moonc实现bundle的机制，wasm版的moonc所产生的.core文件会和native版本有一定不同，这是正常的
 
 ```shell
 tar -xf core.tar.gz --directory="$MOON_HOME/lib/core"
