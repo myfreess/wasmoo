@@ -77,7 +77,8 @@ cp lib include "$MOON_HOME" -r
 > 由于目前moonc实现bundle的机制，wasm版的moonc所产生的.core文件会和native版本有一定不同，这是正常的
 
 ```shell
-tar -xf core.tar.gz --directory="$MOON_HOME/lib/core"
+mkdir -p "$MOON_HOME/lib/core"cd 
+tar -xf core.tar.gz --directory="$MOON_HOME/lib"
 pushd "$MOON_HOME/lib/core"
 moon bundle --target all
 popd

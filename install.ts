@@ -111,16 +111,14 @@ const install_moonc_moonfmt_mooninfo = (MOON_HOME: string, BIN_DIR: string) => {
 /**
  * Installs and bundles the core standard library.
  * @param MOON_HOME - The path to the main .moon directory.
- * @param BIN_DIR - The path to the bin directory containing the 'moon' executable.
  */
 const install_core_library = (MOON_HOME: string, BIN_DIR: string) => {
   console.log('\n[Step 5/6] Installing and bundling the core standard library...');
-  const coreLibPath = join(MOON_HOME, 'lib', 'core');
-  mkdirSync(coreLibPath, { recursive: true });
-  run_command(`tar -xf core.tar.gz --directory="${coreLibPath}"`);
-
+  const libPath = join(MOON_HOME, 'lib', 'core');
+  run_command(`tar -xf core.tar.gz --directory="${libPath}"`);
   const moonExecutable = join(BIN_DIR, 'moon');
-  run_command(`"${moonExecutable}" bundle --target all`, coreLibPath);
+  const corePath = join(libPath, 'core');
+  run_command(`"${moonExecutable}" bundle --target all`, corePath);
 };
 
 /**
