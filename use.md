@@ -1,6 +1,6 @@
 # 安装Wasm版的MoonBit工具链
 
-MoonBit 作为一门现代编程语言，其原生工具链为主流平台（如 x86 Windows、x86 Linux、Arm Darwin）提供了良好而稳定的支持。然而，对于某些特定用户群体，例如 x86 Darwin (Intel Mac) 的老用户（原生工具链已不再支持）或期待在 Arm Linux 上尝鲜的开发者（原生工具链尚未推出），直接安装原生工具链会遇到阻碍。
+MoonBit 作为一门现代编程语言，其原生工具链为主流平台（如 x86 Windows、x86 Linux、Arm Darwin）提供了良好而稳定的支持。然而，对于某些特定用户群体，例如 x86 Darwin (Intel Mac) 的老用户（原生工具链已不再支持）或期待在 Arm Linux 上尝鲜的开发者（原生工具链尚未推出），直接安装原生工具链会遇到困难。
 
 幸运的是，得益于2025年初正式发布的 `wasm_of_ocaml` 项目，MoonBit 的编译器工具链现在可以被编译为 WebAssembly (Wasm) 文件，并通过一个 Node.js 脚本来启动运行。这意味着，在任何支持 Node.js 的平台上，我们都可以使用这套 Wasm 化的工具链。
 
