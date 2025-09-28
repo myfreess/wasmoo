@@ -29,6 +29,16 @@ const run_command = (command: string, cwd: string = process.cwd()) => {
   }
 };
 
+const exec = (command: string, cwd: string = process.cwd()) => {
+  try {
+    return execSync(command, { encoding: 'utf-8' })
+  } catch (error) {
+    console.error(`\n[Error] Command failed: ${command}`);
+    // Throw an error to stop the script.
+    throw new Error(`Command failed: ${command}`);
+  }
+}
+
 /**
  * Downloads and extracts the MoonBit toolchain archive.
  */
@@ -75,7 +85,10 @@ const install_moon_build_system = (BIN_DIR: string, workDir: string) => {
 const install_moonc_moonfmt_mooninfo = (MOON_HOME: string, BIN_DIR: string) => {
   console.log('\n[Step 4/6] Installing compiler, formatter, and info tools...');
   // Add shebang
-  const shebang = '#!/usr/bin/env -S node --stack-size=4096';
+  // TODO: how to gather `env` path dynamically?
+  
+  let envPath = exec('which env').trim();
+  const shebang = `#!${envPath} -S node --stack-size=4096`;
   const jsFiles = ['moonc.js', 'moonfmt.js', 'mooninfo.js'];
 
   jsFiles.forEach((file) => {
