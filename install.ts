@@ -49,7 +49,7 @@ const download_and_extract_toolchain = () => {
 const install_moon_build_system = (BIN_DIR: string, workDir: string) => {
   console.log("\n[Step 3/6] Building and installing 'moon' and 'moonrun'...");
   const moonVersion = readFileSync('moon_version', 'utf-8').trim();
-  console.log(`Required moon version (commit SHA): ${moonVersion}`);
+  console.log(`moon version (commit SHA): ${moonVersion}`);
 
   const moonRepoDir = 'moon';
   run_command('git clone https://github.com/moonbitlang/moon');
