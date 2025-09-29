@@ -11,6 +11,7 @@ import {
 } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
+import { exit } from 'process';
 
 /**
  * Executes a shell command synchronously and displays its output.
@@ -145,7 +146,7 @@ const main = async () => {
   const BIN_DIR = join(MOON_HOME, 'bin');
   const TEMP_DIR = 'moonbit-wasm-temp'; // Temporary directory
   const originalCwd = process.cwd(); // Save original working directory
-
+  let exit_code = 0;
   try {
     // --- Cleanup and setup temporary directory ---
     if (existsSync(TEMP_DIR)) {
@@ -184,7 +185,7 @@ const main = async () => {
     );
   } catch (error) {
     console.error('\n❌ Installation failed. Please check the error messages above.');
-    process.exit(1);
+    exit_code = 1;
   } finally {
     // --- Cleanup ---
     process.chdir(originalCwd); // Ensure we return to the original directory
@@ -192,6 +193,7 @@ const main = async () => {
       console.log(`\nCleaning up temporary directory: ${TEMP_DIR}`);
       rmSync(TEMP_DIR, { recursive: true, force: true });
     }
+    process.exit(exit_code);
   }
 };
 
