@@ -11,7 +11,6 @@ import {
 } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
-import { exit } from 'process';
 
 /**
  * Executes a shell command synchronously and displays its output.
@@ -25,20 +24,44 @@ const run_command = (command: string, cwd: string = process.cwd()) => {
     execSync(command, { stdio: 'inherit', cwd });
   } catch (error) {
     console.error(`\n[Error] Command failed: ${command}`);
-    // Throw an error to stop the script.
     throw new Error(`Command failed: ${command}`);
   }
 };
 
+/**
+ * Executes a shell command synchronously and return its output.
+ * @param command - The command string to execute.
+ * @param cwd - The working directory for the command (defaults to the current process's working directory).
+ */
 const exec = (command: string, cwd: string = process.cwd()) => {
   try {
     return execSync(command, { encoding: 'utf-8' })
   } catch (error) {
     console.error(`\n[Error] Command failed: ${command}`);
-    // Throw an error to stop the script.
     throw new Error(`Command failed: ${command}`);
   }
 }
+
+/**
+ * Synchronously checks if a single command exists in the system's PATH.
+ * This function is BLOCKING and should only be used in scripts or at startup.
+ * @param command - The name of the command to check (e.g., "git", "cargo").
+ * @returns - A boolean, true if the command exists, otherwise false.
+ */
+const command_exists = (command: string): boolean => {
+  try {
+    // execSync will throw an error if the command is not found or fails to execute.
+    // We redirect stdio to 'ignore' to prevent the command's output from cluttering the console.
+    execSync(`${command} --version`, { stdio: 'ignore' });
+    // If the above line does not throw an error, the command exists.
+    return true;
+  } catch (error) {
+    // If we catch an error, it means the command likely does not exist.
+    return false;
+  }
+}
+
+
 
 /**
  * Downloads and extracts the MoonBit toolchain archive.
@@ -132,7 +155,7 @@ const install_core_library = (MOON_HOME: string, BIN_DIR: string) => {
   run_command(`tar -xf core.tar.gz --directory="${libPath}"`);
   const moonExecutable = join(BIN_DIR, 'moon');
   const corePath = join(libPath, 'core');
-  run_command(`"${moonExecutable}" bundle --target all`, corePath);
+  run_command(`${moonExecutable} bundle --target all`, corePath);
 };
 
 /**
@@ -148,6 +171,15 @@ const main = async () => {
   const originalCwd = process.cwd(); // Save original working directory
   let exit_code = 0;
   try {
+    // check for required commands
+    const requiredCommands = ['git', 'cargo'];
+    for (const cmd of requiredCommands) {
+      if (!command_exists(cmd)) {
+        throw new Error(
+          `Required command not found: ${cmd}. Please install it and ensure it's in your PATH.`
+        );
+      }
+    }
     // --- Cleanup and setup temporary directory ---
     if (existsSync(TEMP_DIR)) {
       console.log(`Cleaning up existing temporary directory: ${TEMP_DIR}`);
@@ -162,6 +194,11 @@ const main = async () => {
     download_and_extract_toolchain();
 
     console.log(`\n[Step 2/6] Setting up MOON_HOME directory: ${MOON_HOME}...`);
+
+    if (existsSync(MOON_HOME)) {
+      console.log(`clean up MOON_HOME directory: ${MOON_HOME}`);
+      rmSync(MOON_HOME, { recursive: true, force: true });
+    }
     mkdirSync(MOON_HOME, { recursive: true });
     mkdirSync(BIN_DIR, { recursive: true });
 
@@ -169,10 +206,9 @@ const main = async () => {
     install_moonc_moonfmt_mooninfo(MOON_HOME, BIN_DIR);
     install_core_library(MOON_HOME, BIN_DIR);
 
-    // --- Final instructions ---
     console.log('\n[Step 6/6] Finalizing installation...');
     console.log('\n✅ MoonBit Wasm toolchain installed successfully!');
-    console.log('\n--- IMPORTANT: Final Step ---');
+    console.log('\n--- IMPORTANT: Final Step ---\n');
     console.log(
       `Please add the following line to your shell configuration file (e.g., ~/.bashrc, ~/.zshrc):`
     );
