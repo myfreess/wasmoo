@@ -155,7 +155,14 @@ const install_core_library = (MOON_HOME: string, BIN_DIR: string) => {
   run_command(`tar -xf core.tar.gz --directory="${libPath}"`);
   const moonExecutable = join(BIN_DIR, 'moon');
   const corePath = join(libPath, 'core');
-  run_command(`${moonExecutable} bundle --target all`, corePath);
+  const bundle_core = () => {
+    const originalPath = process.env.PATH || '';
+    const newPath = originalPath === '' ? BIN_DIR : `${BIN_DIR}:${originalPath}`;
+    process.env.PATH = newPath;
+    console.log(`Updated PATH for bundling: ${process.env.PATH}`);
+    run_command(`${moonExecutable} bundle --target all`, corePath);
+  };
+  bundle_core();
 };
 
 /**
