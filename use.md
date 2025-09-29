@@ -17,7 +17,7 @@ MoonBit 作为一门现代编程语言，其原生工具链为主流平台（如
 在安装好上述依赖之后，你可以直接执行下面的命令，通过一个typescript脚本自动安装wasm版MoonBit工具链。
 
 ```shell
-# 还没测试好，等正式发布文章之前加上
+curl -fsSL https://raw.githubusercontent.com/moonbitlang/moonbit-compiler/refs/heads/main/install.ts | node
 ```
 
 如果你有更精细地控制安装过程的需求，我们也提供了一份手动安装的指南，请继续往下看。

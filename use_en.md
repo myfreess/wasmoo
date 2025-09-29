@@ -17,7 +17,7 @@ Install bash (or zsh), curl, git, nodejs, and the rust toolchain. Then, follow t
 After installing the dependencies mentioned above, you can directly execute the following command to automatically install the WASM version of the MoonBit toolchain via a TypeScript script.
 
 ```shell
-# 还没测试好，等正式发布文章之前加上
+curl -fsSL https://raw.githubusercontent.com/moonbitlang/moonbit-compiler/refs/heads/main/install.ts | node
 ```
 
 If you need more fine-grained control over the installation process, we also provide a manual installation guide. Please continue reading below.
