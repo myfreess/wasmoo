@@ -217,11 +217,14 @@ const main = async () => {
     console.log('\n✅ MoonBit Wasm toolchain installed successfully!');
     console.log('\n--- IMPORTANT: Final Step ---\n');
     console.log(
-      `Please add the following line to your shell configuration file (e.g., ~/.bashrc, ~/.zshrc):`
+      `Please add the following line to your shell configuration file (e.g., ~/.bashrc, ~/.zshrc, ~/.config/fish/config.fish):`
     );
-    console.log('\n  export PATH="$HOME/.moon/bin:$PATH"\n');
+    console.log('\nbash/zsh:  export PATH="$HOME/.moon/bin:$PATH"\n');
     console.log(
-      "After adding it, please restart your terminal or run 'source ~/.bashrc' (or your respective config file) to apply the changes."
+      '\nfish:  fish_add_path "$HOME/.moon/bin"\n'
+    );
+    console.log(
+      "After adding it, please restart your terminal to apply the changes."
     );
   } catch (error) {
     console.error('\n❌ Installation failed. Please check the error messages above.');
