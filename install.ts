@@ -174,9 +174,6 @@ const main = async () => {
     console.log('\n✅ MoonBit Wasm toolchain installed successfully!');
     console.log('\n--- IMPORTANT: Final Step ---');
     console.log(
-      `You must add the MoonBit bin directory to your shell's PATH environment variable.`
-    );
-    console.log(
       `Please add the following line to your shell configuration file (e.g., ~/.bashrc, ~/.zshrc):`
     );
     console.log('\n  export PATH="$HOME/.moon/bin:$PATH"\n');
