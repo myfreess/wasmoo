@@ -127,7 +127,7 @@ const install_moonc_moonfmt_mooninfo = (MOON_HOME: string, BIN_DIR: string) => {
  */
 const install_core_library = (MOON_HOME: string, BIN_DIR: string) => {
   console.log('\n[Step 5/6] Installing and bundling the core standard library...');
-  const libPath = join(MOON_HOME, 'lib', 'core');
+  const libPath = join(MOON_HOME, 'lib');
   run_command(`tar -xf core.tar.gz --directory="${libPath}"`);
   const moonExecutable = join(BIN_DIR, 'moon');
   const corePath = join(libPath, 'core');
