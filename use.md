@@ -100,6 +100,7 @@ cp lib include "$MOON_HOME" -r
 mkdir -p "$MOON_HOME/lib/core"cd 
 tar -xf core.tar.gz --directory="$MOON_HOME/lib"
 pushd "$MOON_HOME/lib/core"
+export PATH="$MOON_HOME/bin:$PATH"
 moon bundle --target all
 popd
 ```
